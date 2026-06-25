@@ -1,6 +1,6 @@
 'use client'
 
-import { AlertTriangle, CheckCircle2, Lightbulb, Sparkles } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Lightbulb, Loader2, Sparkles } from 'lucide-react'
 import type { ProfileDraft, ProfileValidation } from '@upiq/shared'
 import { SECTION_MAP } from '@/lib/analyzer/sections'
 import { buildRecommendations, type ProfileSummary } from '@/lib/analyzer/validation'
@@ -22,6 +22,7 @@ interface ReviewSummaryProps {
   validation: ProfileValidation
   summary: ProfileSummary
   onConfirm: () => void
+  analyzing?: boolean
 }
 
 const qualityLabel: Record<ProfileSummary['quality'], string> = {
@@ -38,6 +39,7 @@ export function ReviewSummary({
   validation,
   summary,
   onConfirm,
+  analyzing = false,
 }: ReviewSummaryProps) {
   const recommendations = buildRecommendations(draft, validation, summary)
   const completedSections = summary.completedCount
@@ -124,9 +126,13 @@ export function ReviewSummary({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Keep editing
           </Button>
-          <Button onClick={onConfirm} className="gap-2">
-            <Sparkles className="h-3.5 w-3.5" />
-            Analyze profile
+          <Button onClick={onConfirm} disabled={analyzing} className="gap-2">
+            {analyzing ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Sparkles className="h-3.5 w-3.5" />
+            )}
+            {analyzing ? 'Analyzing…' : 'Analyze profile'}
           </Button>
         </DialogFooter>
       </DialogContent>

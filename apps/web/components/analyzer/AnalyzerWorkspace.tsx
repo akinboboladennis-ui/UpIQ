@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronsDownUp, ChevronsUpDown, ClipboardPaste, Eraser, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ProfileSectionId } from '@upiq/shared'
@@ -25,6 +25,10 @@ export function AnalyzerWorkspace() {
   const clearAll = useProfileAnalyzerStore((s) => s.clearAll)
   const setExpanded = useProfileAnalyzerStore((s) => s.setExpanded)
   const importDraft = useProfileAnalyzerStore((s) => s.importDraft)
+  const setAnalysisLoading = useProfileAnalyzerStore((s) => s.setAnalysisLoading)
+  const setAnalysisSuccess = useProfileAnalyzerStore((s) => s.setAnalysisSuccess)
+  const setAnalysisError = useProfileAnalyzerStore((s) => s.setAnalysisError)
+  const analysisStatus = useProfileAnalyzerStore((s) => s.analysisStatus)
 
   const [activeSection, setActiveSection] = useState<ProfileSectionId | null>(null)
   const [reviewOpen, setReviewOpen] = useState(false)
@@ -58,6 +62,38 @@ export function AnalyzerWorkspace() {
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     })
   }
+
+  const handleAnalyze = useCallback(async () => {
+    setReviewOpen(false)
+    setAnalysisLoading()
+    try {
+      const res = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(draft),
+      })
+      const data = (await res.json()) as {
+        analysisId: string | null
+        createdAt: string
+        result?: import('@/lib/ai/types').AIAnalysisResult
+        error?: string
+        retryable?: boolean
+      }
+      if (!res.ok || !data.result) {
+        setAnalysisError(data.error ?? 'Analysis failed. Please try again.', data.retryable ?? true)
+        toast.error(data.error ?? 'Analysis failed.', { description: 'Please try again.' })
+        return
+      }
+      setAnalysisSuccess(data.result, data.analysisId, data.createdAt)
+      toast.success('Analysis complete!', {
+        description: `Your profile scored ${data.result.score.overall}/100.`,
+      })
+    } catch {
+      const message = 'Network error. Please check your connection and try again.'
+      setAnalysisError(message, true)
+      toast.error('Could not reach the AI service.', { description: message })
+    }
+  }, [draft, setAnalysisLoading, setAnalysisSuccess, setAnalysisError])
 
   function handleClearAll() {
     if (window.confirm('Clear all sections? This cannot be undone.')) {
@@ -154,12 +190,8 @@ export function AnalyzerWorkspace() {
         draft={draft}
         validation={validation}
         summary={summary}
-        onConfirm={() => {
-          setReviewOpen(false)
-          toast.success('Profile saved. AI analysis arrives in the next update.', {
-            description: 'Your draft is ready for Sprint 1D.',
-          })
-        }}
+        onConfirm={handleAnalyze}
+        analyzing={analysisStatus === 'loading'}
       />
 
       <PasteImportDialog open={pasteOpen} onOpenChange={setPasteOpen} onImport={importDraft} />

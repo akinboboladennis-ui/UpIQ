@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { createEmptyProfileDraft, type ProfileDraft, type ProfileSectionId } from '@upiq/shared'
 import { SECTION_ORDER } from '@/lib/analyzer/sections'
+import type { AIAnalysisResult } from '@/lib/ai/types'
 
 type ListSectionId =
   | 'employment'
@@ -49,6 +50,22 @@ interface ProfileAnalyzerState {
   markSaved: () => void
   restoreDraft: () => void
   importDraft: (partial: Partial<ProfileDraft>) => void
+
+  // Analysis
+  analysisStatus: 'idle' | 'loading' | 'success' | 'error'
+  analysisError: string | null
+  analysisRetryable: boolean
+  lastAnalysis: AIAnalysisResult | null
+  lastAnalysisId: string | null
+  lastAnalysisAt: string | null
+  setAnalysisLoading: () => void
+  setAnalysisSuccess: (
+    result: AIAnalysisResult,
+    analysisId: string | null,
+    createdAt: string
+  ) => void
+  setAnalysisError: (message: string, retryable: boolean) => void
+  resetAnalysis: () => void
 }
 
 function emptyExpanded(open = true): Record<ProfileSectionId, boolean> {
@@ -83,6 +100,13 @@ export const useProfileAnalyzerStore = create<ProfileAnalyzerState>()(
       expanded: emptyExpanded(true),
       savedAt: null,
       restorable: false,
+
+      analysisStatus: 'idle',
+      analysisError: null,
+      analysisRetryable: false,
+      lastAnalysis: null,
+      lastAnalysisId: null,
+      lastAnalysisAt: null,
 
       setText: (id, value) => set((s) => ({ draft: { ...s.draft, [id]: value } })),
 
@@ -137,6 +161,24 @@ export const useProfileAnalyzerStore = create<ProfileAnalyzerState>()(
       markSaved: () => set({ savedAt: new Date().toISOString(), restorable: true }),
       restoreDraft: () => set({ restorable: false }),
       importDraft: (partial) => set((s) => ({ draft: { ...s.draft, ...partial } })),
+
+      setAnalysisLoading: () => set({ analysisStatus: 'loading', analysisError: null }),
+      setAnalysisSuccess: (result, analysisId, createdAt) =>
+        set({
+          analysisStatus: 'success',
+          lastAnalysis: result,
+          lastAnalysisId: analysisId,
+          lastAnalysisAt: createdAt,
+          analysisError: null,
+        }),
+      setAnalysisError: (message, retryable) =>
+        set({ analysisStatus: 'error', analysisError: message, analysisRetryable: retryable }),
+      resetAnalysis: () =>
+        set({
+          analysisStatus: 'idle',
+          analysisError: null,
+          analysisRetryable: false,
+        }),
     }),
     {
       name: 'upiq-profile-draft',
