@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ChevronsDownUp, ChevronsUpDown, ClipboardPaste, Eraser, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ProfileSectionId } from '@upiq/shared'
@@ -16,6 +17,7 @@ import { ReviewSummary } from './ReviewSummary'
 import { PasteImportDialog } from './PasteImportDialog'
 
 export function AnalyzerWorkspace() {
+  const router = useRouter()
   const draft = useProfileAnalyzerStore((s) => s.draft)
   const expanded = useProfileAnalyzerStore((s) => s.expanded)
   const savedAt = useProfileAnalyzerStore((s) => s.savedAt)
@@ -88,6 +90,9 @@ export function AnalyzerWorkspace() {
       toast.success('Analysis complete!', {
         description: `Your profile scored ${data.result.score.overall}/100.`,
       })
+      if (data.analysisId) {
+        router.push(`/report/${data.analysisId}`)
+      }
     } catch {
       const message = 'Network error. Please check your connection and try again.'
       setAnalysisError(message, true)
