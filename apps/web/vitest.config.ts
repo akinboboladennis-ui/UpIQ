@@ -6,6 +6,24 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     include: ['**/__tests__/**/*.test.ts'],
+    exclude: ['**/node_modules/**', '**/.next/**'],
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      include: ['lib/**/*.ts', 'stores/**/*.ts', 'hooks/**/*.ts'],
+      exclude: [
+        'lib/supabase/**', // thin wrappers over Supabase SDK
+        'lib/utils.ts', // shadcn utility
+        'lib/monitoring.ts', // placeholder adapters (no logic)
+        '**/*.d.ts',
+      ],
+      thresholds: {
+        lines: 60,
+        functions: 60,
+        branches: 55,
+        statements: 60,
+      },
+    },
   },
   resolve: {
     alias: {
