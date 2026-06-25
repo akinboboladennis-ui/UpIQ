@@ -36,7 +36,7 @@ function write(level: LogLevel, message: string, ctx?: LogContext): void {
     if (level === 'error' || level === 'warn') {
       console.error(line)
     } else {
-      console.log(line)
+      console.warn(line)
     }
     return
   }
@@ -50,7 +50,7 @@ function write(level: LogLevel, message: string, ctx?: LogContext): void {
   } else if (level === 'warn') {
     console.warn(`${timestamp()} ${prefix} ${tag} ${message}`, contextStr)
   } else {
-    console.log(`${timestamp()} ${prefix} ${tag} ${message}`, contextStr)
+    console.warn(`${timestamp()} ${prefix} ${tag} ${message}`, contextStr)
   }
 }
 

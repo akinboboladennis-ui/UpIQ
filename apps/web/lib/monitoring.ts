@@ -30,7 +30,7 @@ export interface ErrorContext {
 /**
  * Capture an error for Sentry. No-op if Sentry is not configured.
  */
-export function captureError(err: unknown, ctx?: ErrorContext): void {
+export function captureError(err: unknown, _ctx?: ErrorContext): void {
   const dsn = process.env['NEXT_PUBLIC_SENTRY_DSN']
 
   if (!dsn) {

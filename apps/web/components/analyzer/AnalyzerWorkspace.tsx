@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ChevronsDownUp, ChevronsUpDown, ClipboardPaste, Eraser, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ProfileSectionId } from '@upiq/shared'
+import type { AIAnalysisResult } from '@/lib/ai/types'
 import { SECTION_CONFIGS } from '@/lib/analyzer/sections'
 import { summarizeProfile, validateProfile } from '@/lib/analyzer/validation'
 import { useProfileAnalyzerStore } from '@/stores/profileAnalyzerStore'
@@ -77,7 +78,7 @@ export function AnalyzerWorkspace() {
       const data = (await res.json()) as {
         analysisId: string | null
         createdAt: string
-        result?: import('@/lib/ai/types').AIAnalysisResult
+        result?: AIAnalysisResult
         error?: string
         retryable?: boolean
       }
@@ -98,7 +99,7 @@ export function AnalyzerWorkspace() {
       setAnalysisError(message, true)
       toast.error('Could not reach the AI service.', { description: message })
     }
-  }, [draft, setAnalysisLoading, setAnalysisSuccess, setAnalysisError])
+  }, [draft, router, setAnalysisLoading, setAnalysisSuccess, setAnalysisError])
 
   function handleClearAll() {
     if (window.confirm('Clear all sections? This cannot be undone.')) {
