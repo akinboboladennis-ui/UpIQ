@@ -112,6 +112,51 @@
   --score-needs-work: #ef4444;
 }
 
+/* Light mode overrides — applied by ThemeProvider via data-theme="light" */
+:root[data-theme='light'] {
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #f9f9fb;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a;
+  --accent: #f4f4f5;
+  --accent-foreground: #18181b;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #6366f1;
+  --bg-surface: #f9f9fb;
+  --bg-elevated: #ffffff;
+  --bg-overlay: #f4f4f5;
+  --border-subtle: #f0f0f3;
+  --border-strong: #d4d4d8;
+  --text-tertiary: #a1a1aa;
+  --brand: #6366f1;
+  --brand-hover: #4f52d9;
+  --brand-subtle: #eef2ff;
+  --brand-muted: #c7d2fe;
+  --success: #16a34a;
+  --success-subtle: #f0fdf4;
+  --warning: #d97706;
+  --warning-subtle: #fffbeb;
+  --error: #dc2626;
+  --error-subtle: #fef2f2;
+  --info: #2563eb;
+  --info-subtle: #eff6ff;
+  --score-excellent: #16a34a;
+  --score-good: #65a30d;
+  --score-developing: #d97706;
+  --score-needs-work: #dc2626;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
