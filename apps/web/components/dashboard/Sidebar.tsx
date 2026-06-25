@@ -19,6 +19,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { BetaBadge } from '@/components/BetaBadge'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Avatar } from '@/components/ui/avatar'
 import { useUiStore } from '@/stores/uiStore'
@@ -85,6 +86,7 @@ export function Sidebar({ displayName, email }: SidebarProps) {
               <span className="text-foreground text-lg font-bold tracking-tight">
                 Up<span className="text-primary">IQ</span>
               </span>
+              <BetaBadge />
             </Link>
           )}
         </div>

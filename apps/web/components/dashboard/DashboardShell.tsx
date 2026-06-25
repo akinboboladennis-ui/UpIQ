@@ -3,6 +3,7 @@
 import { Sidebar } from './Sidebar'
 import { TopNav } from './TopNav'
 import { MobileNav } from './MobileNav'
+import { FeedbackWidget } from '@/components/FeedbackWidget'
 
 interface DashboardShellProps {
   displayName: string | null
@@ -27,6 +28,7 @@ export function DashboardShell({ displayName, firstName, email, children }: Dash
           <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
+      <FeedbackWidget />
     </div>
   )
 }

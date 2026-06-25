@@ -14,6 +14,7 @@
  */
 
 export type FeatureFlag =
+  | 'betaBadge' // Show "Beta" badge in nav and app header
   | 'marketInsights' // Sprint Market — market trend intelligence
   | 'proposalIntel' // Sprint Proposals — proposal optimizer
   | 'jobMatch' // Sprint Match — job matching engine
@@ -25,6 +26,7 @@ export type FeatureFlag =
 
 /** Default values when env var is not set. All off by default. */
 const DEFAULTS: Record<FeatureFlag, boolean> = {
+  betaBadge: true, // On by default — set to false when leaving beta
   marketInsights: false,
   proposalIntel: false,
   jobMatch: false,
@@ -37,6 +39,7 @@ const DEFAULTS: Record<FeatureFlag, boolean> = {
 
 /** Map from flag name to env var key. */
 const ENV_KEYS: Record<FeatureFlag, string> = {
+  betaBadge: 'NEXT_PUBLIC_FF_BETA_BADGE',
   marketInsights: 'NEXT_PUBLIC_FF_MARKET_INSIGHTS',
   proposalIntel: 'NEXT_PUBLIC_FF_PROPOSAL_INTEL',
   jobMatch: 'NEXT_PUBLIC_FF_JOB_MATCH',
