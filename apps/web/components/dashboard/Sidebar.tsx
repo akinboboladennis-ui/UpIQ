@@ -33,7 +33,7 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/profile-analyzer', label: 'Profile Analyzer', icon: UserSearch, comingSoon: true },
+  { href: '/profile-analyzer', label: 'Profile Analyzer', icon: UserSearch },
   { href: '/history', label: 'Analysis History', icon: History, comingSoon: true },
   { href: '/market-insights', label: 'Market Insights', icon: TrendingUp, comingSoon: true },
   { href: '/proposals', label: 'Proposal Intelligence', icon: FileText, comingSoon: true },

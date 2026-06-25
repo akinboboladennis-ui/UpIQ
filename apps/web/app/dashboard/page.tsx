@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import {
@@ -167,15 +168,11 @@ export default async function DashboardPage() {
             </p>
           </div>
           <div className="flex shrink-0 gap-2">
-            <Button
-              variant="default"
-              size="sm"
-              disabled
-              className="gap-2"
-              aria-label="Analyze Profile — coming soon"
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              Analyze Profile
+            <Button asChild variant="default" size="sm" className="gap-2">
+              <Link href="/profile-analyzer">
+                <Sparkles className="h-3.5 w-3.5" />
+                Analyze Profile
+              </Link>
             </Button>
             <Button variant="outline" size="sm" disabled aria-label="View History — coming soon">
               View History
