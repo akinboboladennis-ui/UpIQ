@@ -16,7 +16,9 @@
     "paths": {
       "@/*": ["./*"],
       "@upiq/shared": ["../../packages/shared/src/index.ts"],
-      "@upiq/shared/*": ["../../packages/shared/src/*"]
+      "@upiq/shared/*": ["../../packages/shared/src/*"],
+      "@upiq/intelligence": ["../../packages/intelligence/src/index.ts"],
+      "@upiq/intelligence/*": ["../../packages/intelligence/src/*"]
     },
     "incremental": true,
     "esModuleInterop": true
