@@ -136,3 +136,44 @@
     resize();
     loop();
 })();
+
+/* ==========================================================================
+   Contact form
+   Client-side validation with inline status feedback. No backend is wired
+   up yet, so a successful submit just confirms locally.
+   ========================================================================== */
+
+(function () {
+    "use strict";
+
+    const form = document.getElementById("contact-form");
+    if (!form) return;
+
+    const status = document.getElementById("form-status");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const message = document.getElementById("message").value.trim();
+        const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        if (!name || !email || !message) {
+            status.style.color = "#ff6b6b";
+            status.textContent = "Please fill in every field before sending.";
+            return;
+        }
+
+        if (!emailValid) {
+            status.style.color = "#ff6b6b";
+            status.textContent = "That email address doesn't look right.";
+            return;
+        }
+
+        status.style.color = "";
+        status.textContent =
+            "Thanks, " + name + "! Your message has been received — I'll be in touch soon.";
+        form.reset();
+    });
+})();
