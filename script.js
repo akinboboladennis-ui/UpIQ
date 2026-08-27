@@ -177,3 +177,27 @@
         form.reset();
     });
 })();
+
+/* ==========================================================================
+   Sticky header state + current year
+   Adds a solid background to the sticky nav once the page scrolls, and
+   keeps the footer copyright year current.
+   ========================================================================== */
+
+(function () {
+    "use strict";
+
+    const header = document.querySelector(".site-header");
+    if (header) {
+        const onScroll = function () {
+            header.classList.toggle("is-scrolled", window.scrollY > 10);
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+    }
+
+    const yearEl = document.getElementById("year");
+    if (yearEl) {
+        yearEl.textContent = String(new Date().getFullYear());
+    }
+})();
